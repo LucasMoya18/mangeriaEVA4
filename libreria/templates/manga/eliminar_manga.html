@@ -2,13 +2,12 @@
 
 {% block content %}
 <div class="container mx-auto px-4">
-    <h1 class="text-3xl font-bold mb-4">Delete Manga: {{ manga.title }}</h1>
-    <p class="mb-4">Are you sure you want to delete this manga?</p>
+    <h1 class="text-3xl font-bold mb-4">Eliminar Manga: {{ manga.titulo }}</h1>
+    <p class="mb-4">¿Estás seguro de que deseas eliminar este manga?</p>
     <form method="post">
         {% csrf_token %}
-        <button type="submit" class="bg-red-500 text-white p-2 rounded">Confirm Delete</button>
+        <button type="submit" class="btn btn-primary text-white p-2 rounded">Confirmar Eliminación</button>
     </form>
-    <a href="{% url 'user_profile' %}" class="block mt-4 text-blue-500">Cancel</a>
+    <a href="{% url 'perfil_usuario' %}" class="btn btn-primary block mt-4 text-blue-500">Cancelar</a>
 </div>
 {% endblock %}
-

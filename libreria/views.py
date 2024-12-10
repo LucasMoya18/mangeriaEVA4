@@ -5,6 +5,7 @@ from .forms import FormularioCreacionUsuarioPersonalizado, FormularioAutenticaci
 from django.db.models import Q, Avg, Count
 from .models import Manga, Genero, ItemCarrito, Pedido, ItemPedido, ImagenManga
 from .forms import FormularioManga, FormularioReview
+from googletrans import Translator
 import requests
 
 def registro(request):
@@ -159,12 +160,17 @@ def finalizar_compra(request):
 
     return render(request, 'manga/checkout.html', {'cart_items': items_with_subtotals, 'total': total})
 
+
+
+
 @login_required
 def vender_manga(request):
     respuesta = requests.get('https://api.jikan.moe/v4/genres/manga')
     datos_generos = respuesta.json()['data']
     generos = [(genero['mal_id'], genero['name']) for genero in datos_generos]
     generos = Genero.objects.all()
+
+    translator = Translator()
 
     if request.method == 'POST':
         formulario = FormularioManga(request.POST, request.FILES)
@@ -186,15 +192,27 @@ def vender_manga(request):
 
             return redirect('detalle_manga', manga_id=manga.id)
     else:
+        titulo = request.GET.get('titulo', '')
+        sinopsis_ingles = request.GET.get('descripcion', '')
+        autor = request.GET.get('autor', '')
+        generos_seleccionados = request.GET.getlist('generos', '')
+
+        if sinopsis_ingles:
+            traduccion = translator.translate(sinopsis_ingles, src='en', dest='es')
+            sinopsis_espanol = traduccion.text
+        else:
+            sinopsis_espanol = ''
+
         datos_iniciales = {
-            'titulo': request.GET.get('titulo', ''),
-            'sinopsis': request.GET.get('descripcion', ''),
-            'autor': request.GET.get('autor', ''),
-            'generos': request.GET.getlist('generos', '')
+            'titulo': titulo,
+            'sinopsis': sinopsis_espanol,
+            'autor': autor,
+            'generos': generos_seleccionados
         }
         formulario = FormularioManga(initial=datos_iniciales)
 
     return render(request, 'manga/vender_manga.html', {'form': formulario, 'genres': generos})
+
 
 @login_required
 def buscar_jikan(request):

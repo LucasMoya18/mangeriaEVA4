@@ -1,0 +1,6 @@
+pip install pillow
+pip install request
+pip install googletrans==4.0.0-rc1
+
+y para agregar los generos:
+python manage.py agregar_generos
