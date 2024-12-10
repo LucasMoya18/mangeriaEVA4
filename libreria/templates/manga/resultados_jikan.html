@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-4">
+    <h1 class="text-center mb-4 text-light">Resultados de Jikan API</h1>
+    <div class="row">
+        {% for result in results %}
+        <div class="col-md-4 mb-4">
+            <div class="card bg-dark text-white">
+                <img src="{{ result.images.jpg.image_url }}" class="card-img-top" alt="{{ result.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ result.title }}</h5>
+                    <p class="card-text">
+                        <strong>Autor:</strong> {{ result.authors.0.name }}
+                    </p>
+                    <p class="card-text">
+                        <strong>Géneros:</strong>
+                        {% for genre in result.genres %}
+                            {{ genre.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <a href="{% url 'vender_manga' %}?titulo={{ result.title }}&autor={{ result.authors.0.name }}&descripcion={{ result.synopsis }}" 
+                       class="btn btn-primary">Usar estos datos</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+<style>
+
+.card {
+    background-color: #1c1c1c; /* Gris oscuro para las tarjetas */
+    border: none;
+}
+
+.card-title {
+    color: #ffcc00; /* Título en amarillo brillante */
+}
+
+.card-text strong {
+    color: #ff6600; /* Texto de autor y géneros en naranja */
+}
+
+.btn-primary {
+    background-color: #ff6600;
+    border-color: #ff6600;
+}
+
+.btn-primary:hover {
+    background-color: #cc5200;
+    border-color: #cc5200;
+}
+</style>

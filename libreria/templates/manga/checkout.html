@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-center mb-4 text-primary">Finalizar Compra</h1>
+    
+    <!-- Tabla de Productos -->
+    <div class="table-responsive mb-4">
+        <table class="table table-bordered table-striped align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Manga</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody class='bg-light'>
+                {% for cart in cart_items %}
+                <tr>
+                    <td>{{ cart.item.manga.titulo }}</td>
+                    <td>${{ cart.item.manga.precio }}</td>
+                    <td>{{ cart.item.cantidad }}</td>
+                    <td>${{ cart.subtotal }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Total y Confirmación -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <p class="fs-4 fw-bold text-success">Total: ${{ total }}</p>
+        <form method="post" class="d-inline-block">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success btn-lg px-5">Confirmar Compra</button>
+        </form>
+    </div>
+</div>
+
+<!-- Agregar un fondo y sombra para darle más énfasis -->
+<style>
+    .table-responsive {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+    table th {
+        text-align: center;
+        font-size: 1.1rem;
+    }
+
+    table td {
+        text-align: center;
+        font-size: 1rem;
+    }
+
+    .btn-lg {
+        padding: 0.75rem 2rem;
+    }
+</style>
+
+{% endblock %}

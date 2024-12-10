@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-4">
+    <h1 class="text-center text-3xl font-bold mb-4">Editar Manga: {{ manga.titulo }}</h1>
+
+    <form method="post" enctype="multipart/form-data" class="mx-auto" style="max-width: 600px;">
+        {% csrf_token %}
+
+        <!-- Título -->
+        <div class="mb-3">
+            <label for="{{ form.titulo.id_for_label }}" class="form-label">{{ form.titulo.label }}</label>
+            {{ form.titulo }}
+        </div>
+
+        <!-- Sinopsis -->
+        <div class="mb-3">
+            <label for="{{ form.sinopsis.id_for_label }}" class="form-label">{{ form.sinopsis.label }}</label>
+            {{ form.sinopsis }}
+        </div>
+
+        <!-- Descripción -->
+        <div class="mb-3">
+            <label for="{{ form.descripcion.id_for_label }}" class="form-label">{{ form.descripcion.label }}</label>
+            {{ form.descripcion }}
+        </div>
+
+        <!-- Precio -->
+        <div class="mb-3">
+            <label for="{{ form.precio.id_for_label }}" class="form-label">{{ form.precio.label }}</label>
+            {{ form.precio }}
+        </div>
+
+        <!-- Stock -->
+        <div class="mb-3">
+            <label for="{{ form.stock.id_for_label }}" class="form-label">{{ form.stock.label }}</label>
+            {{ form.stock }}
+        </div>
+
+        <!-- Autor -->
+        <div class="mb-3">
+            <label for="{{ form.autor.id_for_label }}" class="form-label">{{ form.autor.label }}</label>
+            {{ form.autor }}
+        </div>
+
+        <!-- Géneros -->
+        <div class="mb-3">
+            <label for="{{ form.generos.id_for_label }}" class="form-label">{{ form.generos.label }}</label>
+            <div class="d-flex flex-wrap" style="max-height: 300px; overflow-y: auto;">
+                {% for genre in generos %}
+                    <div class="form-check" style="width: 33.33%;">
+                        <input type="checkbox" name="generos" value="{{ genre.id }}" class="form-check-input" id="genero_{{ genre.id }}"
+                        {% if genre.id in generos_seleccionados %}
+                            checked
+                        {% endif %}>
+                        <label class="form-check-label" for="genero_{{ genre.id }}">{{ genre.nombre }}</label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Imagen -->
+        <div class="mb-3">
+            <label for="imagen" class="form-label">Imagen</label>
+            <input type="file" name="imagen" id="imagen" class="form-control">
+            {% if manga.imagen %}
+                <div class="mt-2">
+                    <img src="{{ manga.imagen.url }}" alt="Imagen Actual del Manga" class="img-fluid" style="max-height: 200px;">
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Botón para actualizar -->
+        <button type="submit" class="btn btn-primary w-100">Actualizar Manga</button>
+    </form>
+</div>
+{% endblock %}

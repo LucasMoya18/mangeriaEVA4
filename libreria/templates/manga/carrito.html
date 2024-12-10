@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-center mb-4 text-primary">Tu Carrito</h1>
+
+    {% if cart_items %}
+        <!-- Tabla de Carrito -->
+        <div class="table-responsive mb-4 shadow-sm rounded-3 overflow-hidden">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Manga</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class='bg-white'>
+                    {% for cart in cart_items %}
+                    <tr>
+                        <td>{{ cart.item.manga.titulo }}</td>
+                        <td>${{ cart.item.manga.precio }}</td>
+                        <td>
+                            <form method="post" action="{% url 'actualizar_carrito' cart.item.id %}" class="d-flex align-items-center">
+                                {% csrf_token %}
+                                <input type="number" name="cantidad" value="{{ cart.item.cantidad }}" min="1" class="form-control form-control-sm w-auto me-2">
+                                <button type="submit" class="btn btn-sm btn-primary">Actualizar</button>
+                            </form>
+                        </td>
+                        <td>${{ cart.subtotal }}</td>
+                        <td>
+                            <form method="post" action="{% url 'eliminar_del_carrito' cart.item.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Total y Checkout -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <p class="fs-5 fw-bold text-success">Total: ${{ total }}</p>
+            <a href="{% url 'finalizar_compra' %}" class="btn btn-lg btn-success px-4 py-2 shadow-sm">Proceder al Pago</a>
+        </div>
+    {% else %}
+        <!-- Carrito Vacío -->
+        <div class="alert alert-warning text-center mb-4">
+            Tu carrito está vacío. ¡Empieza a comprar ahora!
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

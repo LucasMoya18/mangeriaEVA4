@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 text-center">
+    <h1 class="text-3xl font-bold mb-4">Search Jikan API</h1>
+    <form method="get" class="mb-4">
+        <input type="text" name="q" placeholder="Search for manga" class="p-2 border rounded">
+        <button type="submit" class="btn-primary text-white p-2 rounded">Search</button>
+    </form>
+</div>
+{% endblock %}
+

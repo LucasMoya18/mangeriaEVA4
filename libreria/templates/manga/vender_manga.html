@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-center mb-4">Vender un Manga</h1>
+    <div class="text-center mb-4">
+        <a href="{% url 'buscar_jikan' %}" class="btn btn-primary" role="button">
+            Buscar en JikanAPI
+        </a>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="mx-auto" style="max-width: 600px;">
+        {% csrf_token %}
+        
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <div class="mb-3">
+            <label for="{{ form.titulo.id_for_label }}" class="form-label">{{ form.titulo.label }}</label>
+            {{ form.titulo }}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.sinopsis.id_for_label }}" class="form-label">{{ form.sinopsis.label }}</label>
+            {{ form.sinopsis }}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.descripcion.id_for_label }}" class="form-label">{{ form.descripcion.label }}</label>
+            {{ form.descripcion }}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.precio.id_for_label }}" class="form-label">{{ form.precio.label }}</label>
+            {{ form.precio }}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.stock.id_for_label }}" class="form-label">{{ form.stock.label }}</label>
+            {{ form.stock }}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.autor.id_for_label }}" class="form-label">{{ form.autor.label }}</label>
+            {{ form.autor }}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.generos.id_for_label }}" class="form-label">Géneros</label>
+            <div class="d-flex flex-wrap" style="max-height: 200px; overflow-y: auto;">
+                {% for genre in genres %}
+                    <div class="form-check" style="width: 33.33%; padding-right: 10px; background-color: #1f2937; color: #fff;">
+                        <input type="checkbox" name="generos" value="{{ genre.id }}" class="form-check-input" id="genero_{{ genre.id }}"
+                        {% if genre.id|stringformat:"s" in form.generos.value %}
+                            checked
+                        {% endif %}>
+                        <label class="form-check-label" for="genero_{{ genre.id }}">{{ genre.nombre }}</label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="imagenes" class="form-label">Imágenes</label>
+            <input type="file" name="imagenes" id="imagenes" class="form-control" multiple>
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">Listar para la venta</button>
+    </form>
+</div>
+{% endblock %}
+

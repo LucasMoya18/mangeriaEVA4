@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-center text-3xl font-bold mb-4 text-white">Catálogo de Mangas</h1>
+
+<!-- Filtro de búsqueda -->
+<form method="get" class="mb-4 d-flex justify-content-center">
+    <div class="input-group mx-2">
+        <input type="text" name="title" placeholder="Buscar por título" class="form-control bg-dark text-white border-secondary">
+    </div>
+
+    <div class="input-group mx-2">
+        <select name="genre" class="form-select bg-dark text-white border-secondary">
+            <option value="">Todos los Géneros</option>
+            {% for genre in generos %}
+                <option value="{{ genre.nombre }}">{{ genre.nombre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="input-group mx-2">
+        <select name="price_order" class="form-select bg-dark text-white border-secondary">
+            <option value="">Orden de Precio</option>
+            <option value="asc">De Menor a Mayor</option>
+            <option value="desc">De Mayor a Menor</option>
+        </select>
+    </div>
+
+    <div class="input-group mx-2">
+        <input type="text" name="author" placeholder="Buscar por autor" class="form-control bg-dark text-white border-secondary">
+    </div>
+
+    <button type="submit" class="btn btn-success mx-2">Filtrar</button>
+</form>
+
+<!-- Catálogo de mangas -->
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+    {% for manga in mangas %}
+    <div class="col">
+        <div class="card h-100 bg-dark text-white border-secondary shadow">
+            {% if manga.imagenes.all %}
+                <img src="{{ manga.imagenes.all.0.imagen.url }}" alt="{{ manga.titulo }}" 
+                     class="card-img-top" style="object-fit: cover; height: 200px;">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ manga.titulo }}</h5>
+                <p class="card-text"><strong>Autor:</strong> {{ manga.autor }}</p>
+                <p class="card-text"><strong>Precio:</strong> ${{ manga.precio }}</p>
+                <p class="card-text"><strong>Stock:</strong> {{ manga.stock }}</p>
+                
+                <!-- Mostrar promedio de puntuación y número de reseñas -->
+                <p class="card-text">
+                    <strong>Calificación:</strong> 
+                    {% if manga.avg_rating %}
+                        {{ manga.avg_rating|floatformat:1 }} / 5 
+                        ({{ manga.review_count }} reseña{{ manga.review_count|pluralize:'s' }})
+                    {% else %}
+                        Aún no hay reseñas
+                    {% endif %}
+                </p>
+                
+                <a href="{% url 'detalle_manga' manga.id %}" class="btn btn-outline-info w-100">Ver Detalles</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
