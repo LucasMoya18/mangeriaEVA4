@@ -58,12 +58,19 @@
                         Aún no hay reseñas
                     {% endif %}
                 </p>
-                
-                <a href="{% url 'detalle_manga' manga.id %}" class="btn btn-outline-info w-100">Ver Detalles</a>
+
+                <!-- Botón de ver detalles -->
+                <a href="{% url 'detalle_manga' manga.id %}" class="btn btn-outline-info w-100 mb-2">Ver Detalles{{user.is_staff}}</a>
+
+                <!-- Botón de eliminar manga solo para admin o staff -->
+                {% if user.is_authenticated and user.is_staff or user.is_superuser %}
+                     
+                    <a href="{% url 'eliminar_manga' manga.id %}" class="btn btn-danger w-100">Eliminar Manga</a>
+                   
+                {% endif %}
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
 {% endblock %}
-

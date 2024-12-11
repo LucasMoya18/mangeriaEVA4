@@ -258,7 +258,7 @@ def editar_manga(request, manga_id):
 
 @login_required
 def eliminar_manga(request, manga_id):
-    manga = get_object_or_404(Manga, id=manga_id, vendedor=request.user)
+    manga = get_object_or_404(Manga, id=manga_id)
     if request.method == 'POST':
         manga.delete()
         return redirect('perfil_usuario')
